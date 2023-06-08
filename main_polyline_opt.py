@@ -44,4 +44,15 @@ try:
     # Define objective function
     def objectiveFunction(x):
         # Calculate new network length and sum of weights after adding N points
-        x_sum = sum(x[:N_points] ) / len(input_length_metr
+        x_sum = sum(x[:N_points] ) / len(input_length_metr)
+        total_weight_sum = sum([row[0] * row[1] for row in input_weight_table.asSpatialReference(None).search(*new_lines))] / len(new_lines) # sum total weight values
+            return new_total_network_length - old_total_network_length - max_dist * len(new_lines) - max_dist**2 * 0.5 + x_sum * len(new_points) - total_weight_sum * max_dist
+
+try:
+    x = optimize.minimize(objectiveFunction, [0]*N_points)
+except:
+    print('Optimization failed! Try decreasing N_points...')
+    exit()
+
+print('\nNew lines:\n{}'.format(',\n'.join([str((x[0]+old_starting_coordinates) for x in zip(*optimized)])))
+                                        
